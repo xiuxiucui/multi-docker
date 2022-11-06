@@ -1,0 +1,17 @@
+sudo : required
+services:
+  -docker
+
+before_install:
+  -docker build -t csc940218/react-test -f ./client/Dockerfile.dev ./client
+
+
+script:
+  - docker run csc940218/react-test npm test -- -- coverage
+
+after-success:
+  - docker build -t csc940218/multi-client ./client
+  - docker build -t csc940218/multi-nginx ./nginx
+  - docker build -t csc940218/multi-server ./server
+  - docker build -t csc940218/multi-worker ./worker
+
